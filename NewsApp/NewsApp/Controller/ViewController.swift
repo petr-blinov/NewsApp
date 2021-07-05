@@ -1,19 +1,18 @@
 //
 //  ViewController.swift
-//  Lesson17HomeworkNewsApp
+//  NewsApp
 //
 //  Created by Петр Блинов on 03.06.2021.
 //
 
 import UIKit
 
-final class ViewController: BaseViewController {
+class ViewController: BaseViewController {
     
-    // MARK: - Dependencies
-    private let networkService: NetworkServiceProtocol
+// MARK: - Dependencies
+    let networkService: NetworkServiceProtocol
     
-    
-    // MARK: - Init
+// MARK: - Init
     init(networkService: NetworkServiceProtocol) {
         self.networkService = networkService
         super.init(nibName: nil, bundle: nil)
@@ -22,8 +21,7 @@ final class ViewController: BaseViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-    //MARK: - UI
+//MARK: - UI
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(ArticleCell.self, forCellReuseIdentifier: ArticleCell.identifier)
@@ -31,24 +29,30 @@ final class ViewController: BaseViewController {
         tableView.delegate = self
         tableView.showsVerticalScrollIndicator = true
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.refreshControl = refreshControl
         return tableView
     }()
+    let refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(pullToRefresh(sender:)), for: .valueChanged)
+        return refreshControl
+    }()
     
-    
-    // MARK: - Internal Properties
+// MARK: - Internal Properties
     private var dataSource = [Get2ArticleDataResponse]()
     
-    
-    // MARK: - Life Cycle
+// MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureUI()
         // Устанавливаем константу с номером страницы на 1 - чтобы при загрузке приложения выдача была с первой страницы
         Constants.page = 1
         loadData()
-        
         tabBarItem.title = "News"
         tabBarItem.image = UIImage(systemName: "globe")
+    }
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        configureUI()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -56,10 +60,7 @@ final class ViewController: BaseViewController {
         Constants.searchRequest = ""
     }
     
-
-    
-    
-    // MARK: - Private methods
+// MARK: - Methods
     private func configureUI() {
         view.backgroundColor = .white
         navigationItem.title = "News"
@@ -72,21 +73,22 @@ final class ViewController: BaseViewController {
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
-    
+    @objc private func pullToRefresh(sender: UIRefreshControl) {
+        Constants.page = 1
+        loadData()
+        sender.endRefreshing()
+    }
     private func loadData() {
         isLoading = true
-        self.networkService.getArticles {
+        self.networkService.getArticles(searchRequest: "") {
             self.processDataLoading($0) }
     }
-    
-    private func processDataLoading(_ response: GetAPIResponse) {
+    func processDataLoading(_ response: GetAPIResponse) {
         DispatchQueue.main.async {
             switch response {
-            
             case .success(let data):
                 self.dataSource.append(contentsOf: data.articles)
                 self.tableView.reloadData()
-                
             case .failure(let error):
                 self.showErrorAlert(for: error)
             }
@@ -94,7 +96,7 @@ final class ViewController: BaseViewController {
         }
     }
     
-    // MARK: - Error handling
+// MARK: - Error handling
     private func showErrorAlert(for error: NetworkServiceError) {
         let alert = UIAlertController(title: "Oops, something went wrong",
                                       message: setAlertMessage(for: error),
@@ -126,7 +128,6 @@ extension ViewController: UITableViewDataSource {
         return cell
     }
 }
-
 extension ViewController: UITableViewDelegate {
     
     // Используем willDisplay cell для того чтобы таблица загружала новый кусок данных когда мы пролистываем до последней ячейки (у нас в выдаче не больше двух страниц по 20 статей, поэтому ограничиваемся двумя страницами)
@@ -134,7 +135,7 @@ extension ViewController: UITableViewDelegate {
         if indexPath.row == dataSource.count - 1, !isLoading, Constants.page == 1 {
             Constants.page += 1
             isLoading = true
-            networkService.getArticles { self.processDataLoading($0) }
+            networkService.getArticles(searchRequest: "") { self.processDataLoading($0) }
         }
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

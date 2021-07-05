@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  Lesson17HomeworkNewsApp
+//  NewsApp
 //
 //  Created by Петр Блинов on 03.06.2021.
 //
@@ -15,6 +15,7 @@ var window: UIWindow?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         let service = NetworkService()
+        _ = CoreDataStack.shared
         
         window = UIWindow(frame: UIScreen.main.bounds)
         

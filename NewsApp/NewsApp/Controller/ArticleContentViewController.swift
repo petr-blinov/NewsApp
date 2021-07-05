@@ -1,22 +1,22 @@
 //
 //  ArticleContentViewController.swift
-//  Lesson17HomeworkNewsApp
+//  NewsApp
 //
 //  Created by Петр Блинов on 06.06.2021.
 //
 
 import UIKit
 import SafariServices
-
-
-final class ArticleContentViewController: BaseViewController {
-  
-    // MARK: - Dependencies
-    private var networkService : NetworkServiceProtocol
-    private var model: Get2ArticleDataResponse
-  
+import CoreData
     
-    // MARK: - Init
+final class ArticleContentViewController: BaseViewController {
+    
+    
+// MARK: - Dependencies
+    private var networkService: NetworkServiceProtocol
+    private var model: Get2ArticleDataResponse
+    
+// MARK: - Init
     init(networkService: NetworkServiceProtocol, model: Get2ArticleDataResponse) {
       self.networkService = networkService
       self.model = model
@@ -26,12 +26,11 @@ final class ArticleContentViewController: BaseViewController {
       fatalError("init(coder:) has not been implemented")
     }
     
-    
-    // MARK: - Internal Properties
+// MARK: - Internal Properties
     private var linkForWebView = ""
+    private let stack = CoreDataStack.shared
     
-    
-  // MARK: - UI
+// MARK: - UI
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.backgroundColor = .white
@@ -88,7 +87,7 @@ final class ArticleContentViewController: BaseViewController {
         return saveBarButton
     }()
 
-  // MARK: - LifeCircle
+// MARK: - LifeCircle
   override func viewDidLoad() {
     super.viewDidLoad()
     view.backgroundColor = .white
@@ -108,28 +107,37 @@ final class ArticleContentViewController: BaseViewController {
     setConstraints()
   }
     
-    
-    // MARK: - Methods
-    
+// MARK: - Methods
     @objc func openWebView() {
         guard let url = URL(string: self.model.url) else { return }
         let webViewViewController = SFSafariViewController(url: url)
         present(webViewViewController, animated: true, completion: nil)
     }
-    
     private func showSaveAlert() {
         let alert = UIAlertController(title: "Saved", message: "The article added to Saved articles",preferredStyle: .alert)
         let action = UIAlertAction(title: "Got it", style: .default, handler: nil)
         alert.addAction(action)
         present(alert, animated: true)
     }
-    
     @objc func addToSavedNews() {
         showSaveAlert()
+        let backgroundContext = stack.container.newBackgroundContext()
+        backgroundContext.performAndWait {
+            let article = MOArticle(context: backgroundContext)
+            article.articleTitle = self.articleTitle.text
+            article.articlePublishedAt = self.articlePublishedAt.text
+            article.articleContent = self.articleContent.text
+            article.sourceLink = self.linkForWebView
+            article.linkForWebView = self.linkForWebView
+            // Конвертим картинку в дату чтобы сохранить ее в Core Data (не включаем это в проект т.к. размер получается слишком большой - CoreData: annotation: PostSaveMaintenance: fileSize 11445392 greater than prune threshold)
+//            guard let image = self.imageView.image else { return }
+//            let imageData = image.pngData()! as Data
+//            article.image = imageData
+            try? backgroundContext.save()
+        }
     }
     
-  
-// MARK: - Constraints
+  // MARK: - Constraints
   private func setConstraints() {
     NSLayoutConstraint.activate([
                                     
@@ -139,7 +147,7 @@ final class ArticleContentViewController: BaseViewController {
         scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
         scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
                                     
-        articleTitle.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 15),
+        articleTitle.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 0),
         articleTitle.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15),
         articleTitle.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -15),
    
@@ -166,7 +174,7 @@ final class ArticleContentViewController: BaseViewController {
         sourceLinkButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -100)])
   }
   
-  // MARK: - LoadData
+// MARK: - Load image and arrange elements
   private func loadData() {
     isLoading = true
     networkService.loadImage(with: model) { (data) in
@@ -176,7 +184,7 @@ final class ArticleContentViewController: BaseViewController {
             self.imageView.image = image
             self.articlePublishedAt.text = String(self.model.publishedAt.dropLast(10))
             self.articleContent.text = self.model.description
-            self.readInSource.text = "Read at source:"
+            self.readInSource.text = "Read in source:"
             self.sourceLinkButton.setTitle(self.model.url, for: .normal)
             self.linkForWebView = self.model.url
             self.isLoading = false

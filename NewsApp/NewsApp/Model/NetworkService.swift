@@ -1,6 +1,6 @@
 //
 //  NetworkService.swift
-//  Lesson17HomeworkNewsApp
+//  NewsApp
 //
 //  Created by Петр Блинов on 04.06.2021.
 //
@@ -25,16 +25,20 @@ extension NetworkService: NetworkServiceProtocol {
     
     typealias Handler = (Data?, URLResponse?, Error?) -> Void
     
-    // MARK: - Загружаем статьи
-    func getArticles(completion: @escaping (GetAPIResponse) -> Void) {
+    // MARK: - Загружаем список статей
+    func getArticles(searchRequest: String, completion: @escaping (GetAPIResponse) -> Void) {
         
         // URL request
-        var components = URLComponents(string: Constants.APIMethods.getTopHeadlines)
-        components?.queryItems = [
+        var components = URLComponents() 
+        components.scheme = "https"
+        components.host = "newsapi.org"
+        components.path = "/v2/top-headlines"
+        components.queryItems = [
             URLQueryItem(name: "country", value: "us"),
             URLQueryItem(name: "page", value: String(Constants.page)),
-            URLQueryItem(name: "q", value: Constants.searchRequets)]
-        guard let url = components?.url else { completion(.failure(.network)); return }
+            URLQueryItem(name: "q", value: searchRequest)]
+        guard let url = components.url else { completion(.failure(.network)); return }
+        
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.addValue(Constants.Authorization.apiKey, forHTTPHeaderField: "X-Api-Key")

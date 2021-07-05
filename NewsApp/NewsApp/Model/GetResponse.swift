@@ -1,6 +1,6 @@
 //
 //  GetResponse.swift
-//  Lesson17HomeworkNewsApp
+//  NewsApp
 //
 //  Created by Петр Блинов on 03.06.2021.
 //

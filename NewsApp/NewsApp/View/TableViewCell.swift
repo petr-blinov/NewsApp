@@ -1,6 +1,6 @@
 //
 //  TableViewCell.swift
-//  Lesson17HomeworkNewsApp
+//  NewsApp
 //
 //  Created by Петр Блинов on 04.06.2021.
 //
@@ -43,8 +43,10 @@ final class ArticleCell: UITableViewCell {
     
   // MARK: - Configure
   
-  func configure(with model: Get2ArticleDataResponse) {
-    articleTitleLabel.text = model.title
-  }
-    
+    func configure(with model: Get2ArticleDataResponse) {
+        articleTitleLabel.text = model.title
+    }
+    func configureFromCoreData(with title: String) {
+        articleTitleLabel.text = title
+    }
 }

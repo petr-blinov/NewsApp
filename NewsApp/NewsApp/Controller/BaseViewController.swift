@@ -1,6 +1,6 @@
 //
 //  BaseViewController.swift
-//  Lesson17HomeworkNewsApp
+//  NewsApp
 //
 //  Created by Петр Блинов on 04.06.2021.
 //
