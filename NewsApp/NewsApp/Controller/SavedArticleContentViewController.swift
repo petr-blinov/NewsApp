@@ -1,25 +1,23 @@
 //
-//  ArticleContentViewController.swift
+//  SavedArticleContentViewController.swift
 //  NewsApp
 //
-//  Created by Петр Блинов on 06.06.2021.
+//  Created by Petr Blinov on 06.07.2021.
 //
 
 import UIKit
 import SafariServices
 import CoreData
     
-final class ArticleContentViewController: BaseViewController {
+final class SavedArticleContentViewController: BaseViewController {
     
     
 // MARK: - Dependencies
-    private var networkService: NetworkServiceProtocol
-    private var model: Get2ArticleDataResponse
+    private var modelObject: MOArticle
     
 // MARK: - Init
-    init(networkService: NetworkServiceProtocol, model: Get2ArticleDataResponse) {
-      self.networkService = networkService
-      self.model = model
+    init(modelObject: MOArticle) {
+      self.modelObject = modelObject
       super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) {
@@ -28,7 +26,6 @@ final class ArticleContentViewController: BaseViewController {
     
 // MARK: - Internal Properties
     private var linkForWebView = ""
-    private let stack = CoreDataStack.shared
     
 // MARK: - UI
     private lazy var scrollView: UIScrollView = {
@@ -82,16 +79,11 @@ final class ArticleContentViewController: BaseViewController {
         sourceLinkButton.addTarget(self, action: #selector(openWebView), for: .touchUpInside)
         return sourceLinkButton
     }()
-    lazy var saveBarButton: UIBarButtonItem = {
-        let saveBarButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(addToSavedNews))
-        return saveBarButton
-    }()
 
 // MARK: - Life Cycle
   override func viewDidLoad() {
     super.viewDidLoad()
     view.backgroundColor = .white
-    navigationItem.rightBarButtonItems = [saveBarButton]
     view.addSubview(scrollView)
     scrollView.addSubview(articleTitle)
     scrollView.addSubview(imageView)
@@ -99,7 +91,7 @@ final class ArticleContentViewController: BaseViewController {
     scrollView.addSubview(articleContent)
     scrollView.addSubview(readInSource)
     scrollView.addSubview(sourceLinkButton)
-    loadData()
+    setContentFromCoreData()
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -109,35 +101,13 @@ final class ArticleContentViewController: BaseViewController {
     
 // MARK: - Methods
     @objc func openWebView() {
-        guard let url = URL(string: self.model.url) else { return }
+        guard let sourceLink = self.modelObject.sourceLink else { return }
+        guard let url = URL(string: sourceLink) else { return }
         let webViewViewController = SFSafariViewController(url: url)
         present(webViewViewController, animated: true, completion: nil)
     }
-    private func showSaveAlert() {
-        let alert = UIAlertController(title: "Saved", message: "The article added to Saved articles",preferredStyle: .alert)
-        let action = UIAlertAction(title: "Got it", style: .default, handler: nil)
-        alert.addAction(action)
-        present(alert, animated: true)
-    }
-    @objc func addToSavedNews() {
-        showSaveAlert()
-        stack.backgroundContext.performAndWait {
-            let article = MOArticle(context: stack.backgroundContext)
-            article.articleTitle = self.articleTitle.text
-            article.articlePublishedAt = self.articlePublishedAt.text
-            article.articleContent = self.articleContent.text
-            article.sourceLink = self.linkForWebView
-            article.linkForWebView = self.linkForWebView
-            // Конвертим картинку в дату чтобы сохранить ее в Core Data 
-            guard let image = self.imageView.image else { return }
-            let imageData = image.pngData() as Data?
-            article.imageData = imageData
-            try? stack.backgroundContext.save()
-            // Уточнение: перезагружать таблицу с сохраненными статьями мы  будем в метоже viewWillAppear в SavedNewsViewController
-        }
-    }
     
-  // MARK: - Constraints
+// MARK: - Constraints
   private func setConstraints() {
     NSLayoutConstraint.activate([
                                     
@@ -174,22 +144,19 @@ final class ArticleContentViewController: BaseViewController {
         sourceLinkButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -100)])
   }
   
-// MARK: - Load image and arrange elements
-  private func loadData() {
-    isLoading = true
-    networkService.loadImage(with: model) { (data) in
-      if let data = data, let image = UIImage(data: data) {
-          DispatchQueue.main.async {
-            self.articleTitle.text = self.model.title
-            self.imageView.image = image
-            self.articlePublishedAt.text = String(self.model.publishedAt.dropLast(10))
-            self.articleContent.text = self.model.description
+    // MARK: - Set content from Core Data
+    private func setContentFromCoreData() {
+        
+        DispatchQueue.main.async {
+            self.articleTitle.text = self.modelObject.articleTitle
+            guard let imageData = self.modelObject.imageData else { return }
+            self.imageView.image = UIImage(data: imageData)
+            self.articlePublishedAt.text = self.modelObject.articlePublishedAt
+            self.articleContent.text = self.modelObject.articleContent
             self.readInSource.text = "Read in source:"
-            self.sourceLinkButton.setTitle(self.model.url, for: .normal)
-            self.linkForWebView = self.model.url
-            self.isLoading = false
-          }
-      }
+            self.sourceLinkButton.setTitle(self.modelObject.sourceLink, for: .normal)
+            guard let linkForWebView = self.modelObject.linkForWebView else { return }
+            self.linkForWebView = linkForWebView
+        }
     }
-  }
 }

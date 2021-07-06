@@ -25,7 +25,7 @@ class SavedNewsViewController: BaseViewController {
         let tableView = UITableView()
         tableView.register(ArticleCell.self, forCellReuseIdentifier: ArticleCell.identifier)
         tableView.dataSource = self
-//        tableView.delegate = self
+        tableView.delegate = self
         tableView.showsVerticalScrollIndicator = true
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
@@ -45,7 +45,7 @@ class SavedNewsViewController: BaseViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("Reloading tableView")
+        try? frc.performFetch()
         tableView.reloadData()
     }
     
@@ -76,13 +76,15 @@ extension SavedNewsViewController: UITableViewDataSource {
         return cell
     }
 }
-//extension SavedNewsViewController: UITableViewDelegate {
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        // не забываем диселектнуть ряд чтобы все было красиво
-//        tableView.deselectRow(at: indexPath,animated : true)
-//        isLoading = false
-//        let articleContentViewController = ArticleContentViewController(networkService: networkService, model: dataSource[indexPath.row])
-//        navigationController?.pushViewController(articleContentViewController, animated: true)
-//    }
-//}
+extension SavedNewsViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // не забываем диселектнуть ряд чтобы все было красиво
+        tableView.deselectRow(at: indexPath,animated : true)
+        isLoading = false
+        let article = frc.object(at: indexPath)
+        let savedArticleContentViewController = SavedArticleContentViewController(modelObject: article)
+        navigationController?.pushViewController(savedArticleContentViewController, animated: true)
+    }
+}
+
 

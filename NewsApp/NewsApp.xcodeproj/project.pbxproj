@@ -11,8 +11,9 @@
 		A2273A4C2687534400259572 /* SavedNewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2273A4B2687534400259572 /* SavedNewsViewController.swift */; };
 		A234DB42269073240064E84C /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = A234DB41269073240064E84C /* CoreDataStack.swift */; };
 		A234DB452690751B0064E84C /* NewsApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A234DB432690751B0064E84C /* NewsApp.xcdatamodeld */; };
-		A234DB542691FF5A0064E84C /* MOArticle+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A234DB522691FF5A0064E84C /* MOArticle+CoreDataClass.swift */; };
-		A234DB552691FF5A0064E84C /* MOArticle+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A234DB532691FF5A0064E84C /* MOArticle+CoreDataProperties.swift */; };
+		A234DB8B2694CA7D0064E84C /* SavedArticleContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A234DB8A2694CA7D0064E84C /* SavedArticleContentViewController.swift */; };
+		A234DB8E2694DC850064E84C /* MOArticle+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A234DB8C2694DC850064E84C /* MOArticle+CoreDataClass.swift */; };
+		A234DB8F2694DC850064E84C /* MOArticle+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A234DB8D2694DC850064E84C /* MOArticle+CoreDataProperties.swift */; };
 		F47034752668D8ED0090C973 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47034742668D8ED0090C973 /* AppDelegate.swift */; };
 		F47034792668D8ED0090C973 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47034782668D8ED0090C973 /* ViewController.swift */; };
 		F470347E2668D8F10090C973 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F470347D2668D8F10090C973 /* Assets.xcassets */; };
@@ -33,8 +34,9 @@
 		A2273A4B2687534400259572 /* SavedNewsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedNewsViewController.swift; sourceTree = "<group>"; };
 		A234DB41269073240064E84C /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		A234DB442690751B0064E84C /* NewsApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NewsApp.xcdatamodel; sourceTree = "<group>"; };
-		A234DB522691FF5A0064E84C /* MOArticle+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MOArticle+CoreDataClass.swift"; sourceTree = "<group>"; };
-		A234DB532691FF5A0064E84C /* MOArticle+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MOArticle+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		A234DB8A2694CA7D0064E84C /* SavedArticleContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedArticleContentViewController.swift; sourceTree = "<group>"; };
+		A234DB8C2694DC850064E84C /* MOArticle+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MOArticle+CoreDataClass.swift"; sourceTree = "<group>"; };
+		A234DB8D2694DC850064E84C /* MOArticle+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MOArticle+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F47034712668D8ED0090C973 /* NewsApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NewsApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F47034742668D8ED0090C973 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F47034782668D8ED0090C973 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -66,8 +68,8 @@
 		A234DB40269072F10064E84C /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
-				A234DB522691FF5A0064E84C /* MOArticle+CoreDataClass.swift */,
-				A234DB532691FF5A0064E84C /* MOArticle+CoreDataProperties.swift */,
+				A234DB8C2694DC850064E84C /* MOArticle+CoreDataClass.swift */,
+				A234DB8D2694DC850064E84C /* MOArticle+CoreDataProperties.swift */,
 				A234DB41269073240064E84C /* CoreDataStack.swift */,
 				A234DB432690751B0064E84C /* NewsApp.xcdatamodeld */,
 			);
@@ -113,6 +115,7 @@
 				A2273A492687532700259572 /* SearchViewController.swift */,
 				A2273A4B2687534400259572 /* SavedNewsViewController.swift */,
 				F470350A266CFBD50090C973 /* ArticleContentViewController.swift */,
+				A234DB8A2694CA7D0064E84C /* SavedArticleContentViewController.swift */,
 				F47034A12669FDA40090C973 /* SpinnerViewController.swift */,
 				F47034A4266A023B0090C973 /* BaseViewController.swift */,
 			);
@@ -217,9 +220,9 @@
 			files = (
 				F470350B266CFBD60090C973 /* ArticleContentViewController.swift in Sources */,
 				F47034AB266A4C2E0090C973 /* NetworkService.swift in Sources */,
-				A234DB552691FF5A0064E84C /* MOArticle+CoreDataProperties.swift in Sources */,
 				F47034792668D8ED0090C973 /* ViewController.swift in Sources */,
 				F470349326691BF70090C973 /* NetworkServiceError.swift in Sources */,
+				A234DB8B2694CA7D0064E84C /* SavedArticleContentViewController.swift in Sources */,
 				A2273A4C2687534400259572 /* SavedNewsViewController.swift in Sources */,
 				A234DB452690751B0064E84C /* NewsApp.xcdatamodeld in Sources */,
 				F470349B266938010090C973 /* NetworkServiceProtocol.swift in Sources */,
@@ -227,8 +230,9 @@
 				A234DB42269073240064E84C /* CoreDataStack.swift in Sources */,
 				A2273A4A2687532700259572 /* SearchViewController.swift in Sources */,
 				F47034752668D8ED0090C973 /* AppDelegate.swift in Sources */,
+				A234DB8E2694DC850064E84C /* MOArticle+CoreDataClass.swift in Sources */,
 				F470348D26690C470090C973 /* Constants.swift in Sources */,
-				A234DB542691FF5A0064E84C /* MOArticle+CoreDataClass.swift in Sources */,
+				A234DB8F2694DC850064E84C /* MOArticle+CoreDataProperties.swift in Sources */,
 				F47034A5266A023B0090C973 /* BaseViewController.swift in Sources */,
 				F47034A22669FDA40090C973 /* SpinnerViewController.swift in Sources */,
 				F470349726691D590090C973 /* GetResponse.swift in Sources */,

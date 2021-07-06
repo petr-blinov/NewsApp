@@ -2,7 +2,7 @@
 //  MOArticle+CoreDataClass.swift
 //  NewsApp
 //
-//  Created by Petr Blinov on 04.07.2021.
+//  Created by Petr Blinov on 06.07.2021.
 //
 //
 

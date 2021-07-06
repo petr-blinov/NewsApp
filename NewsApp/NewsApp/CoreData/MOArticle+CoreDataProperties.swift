@@ -2,7 +2,7 @@
 //  MOArticle+CoreDataProperties.swift
 //  NewsApp
 //
-//  Created by Petr Blinov on 04.07.2021.
+//  Created by Petr Blinov on 06.07.2021.
 //
 //
 
@@ -16,11 +16,12 @@ extension MOArticle {
         return NSFetchRequest<MOArticle>(entityName: "MOArticle")
     }
 
-    @NSManaged public var articleTitle: String?
-    @NSManaged public var articlePublishedAt: String?
     @NSManaged public var articleContent: String?
-    @NSManaged public var sourceLink: String?
+    @NSManaged public var articlePublishedAt: String?
+    @NSManaged public var articleTitle: String?
     @NSManaged public var linkForWebView: String?
+    @NSManaged public var sourceLink: String?
+    @NSManaged public var imageData: Data?
 
 }
 

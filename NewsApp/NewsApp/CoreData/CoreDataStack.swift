@@ -21,6 +21,11 @@ final class CoreDataStack {
         }
         return container
     }()
-
+    
+    var viewContext: NSManagedObjectContext { container.viewContext }
+    lazy var backgroundContext: NSManagedObjectContext = container.newBackgroundContext()
+    var coordinator: NSPersistentStoreCoordinator { container.persistentStoreCoordinator }
+    
     private init() {}
+    
 }

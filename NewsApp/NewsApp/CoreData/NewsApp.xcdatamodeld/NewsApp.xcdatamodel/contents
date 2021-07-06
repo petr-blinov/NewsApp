@@ -4,10 +4,11 @@
         <attribute name="articleContent" optional="YES" attributeType="String"/>
         <attribute name="articlePublishedAt" optional="YES" attributeType="String"/>
         <attribute name="articleTitle" optional="YES" attributeType="String"/>
+        <attribute name="imageData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="linkForWebView" optional="YES" attributeType="String"/>
         <attribute name="sourceLink" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="MOArticle" positionX="-63" positionY="-18" width="128" height="104"/>
+        <element name="MOArticle" positionX="-63" positionY="-18" width="128" height="119"/>
     </elements>
 </model>
