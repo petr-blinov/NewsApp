@@ -114,7 +114,18 @@ final class ArticleContentViewController: BaseViewController {
         present(webViewViewController, animated: true, completion: nil)
     }
     private func showSaveAlert() {
-        let alert = UIAlertController(title: "Saved", message: "The article added to Saved articles",preferredStyle: .alert)
+        // добавляем в текст сообщения обращение по имени, которое берем из UserDefaults если оно там есть
+        var message: String = {
+            if let userName = UserDefaults.standard.value(forKey: "userName") as? String {
+                if userName != "" {
+                    message = "\(userName), the article has been added to Saved articles"
+                } else {
+                    message = "The article has been added to Saved articles"
+                }
+            }
+            return message
+        }()
+        let alert = UIAlertController(title: "Saved", message: message, preferredStyle: .alert)
         let action = UIAlertAction(title: "Got it", style: .default, handler: nil)
         alert.addAction(action)
         present(alert, animated: true)
@@ -133,7 +144,7 @@ final class ArticleContentViewController: BaseViewController {
             let imageData = image.pngData() as Data?
             article.imageData = imageData
             try? stack.backgroundContext.save()
-            // Уточнение: перезагружать таблицу с сохраненными статьями мы  будем в метоже viewWillAppear в SavedNewsViewController
+            // Уточнение: перезагружать таблицу с сохраненными статьями мы будем в методе viewWillAppear в SavedNewsViewController
         }
     }
     

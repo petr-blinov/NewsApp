@@ -29,7 +29,18 @@ class SearchViewController: BaseViewController {
         searchController.searchResultsUpdater = self
         // говорим чтобы не затемнял результаты поиска
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Enter a keyword to search for"
+        // добавляем в плейсхолдер обращение по имени если оно сохранено в UserDefaults
+        var message: String = {
+            if let userName = UserDefaults.standard.value(forKey: "userName") as? String {
+                if userName != "" {
+                    message = "\(userName), enter a keyword to search for"
+                } else {
+                    message = "Enter a keyword to search for"
+                }
+            }
+            return message
+        }()
+        searchController.searchBar.placeholder = message
         return searchController
     }()
     private lazy var tableView: UITableView = {
@@ -40,6 +51,10 @@ class SearchViewController: BaseViewController {
         tableView.showsVerticalScrollIndicator = true
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
+    }()
+    lazy var personalizeBarButton: UIBarButtonItem = {
+        let personalizeBarButton = UIBarButtonItem(title: "Personalize", style: .plain, target: self, action: #selector(personalizeButtonPressed))
+        return personalizeBarButton
     }()
 
 // MARK: - Internal Properties
@@ -64,6 +79,7 @@ class SearchViewController: BaseViewController {
         navigationItem.hidesSearchBarWhenScrolling = false
         view.addSubview(tableView)
     }
+    
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         configureUI()
@@ -73,6 +89,7 @@ class SearchViewController: BaseViewController {
     private func configureUI() {
         navigationItem.title = "Search"
         navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.rightBarButtonItems = [personalizeBarButton]
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
@@ -86,6 +103,7 @@ class SearchViewController: BaseViewController {
         self.networkService.getArticles(searchRequest: searchRequest) {
             self.processDataLoading($0) }
     }
+    
     private func processDataLoading(_ response: GetAPIResponse) {
         DispatchQueue.main.async {
             switch response {
@@ -99,6 +117,37 @@ class SearchViewController: BaseViewController {
             self.isLoading = false
         }
     }
+    
+    @objc func personalizeButtonPressed() {
+        showPersonalizeAlert()
+    }
+    
+    // Получаем имя пользователя и сохраняем его в UserDefaults для дальнейшего обращения по имени в плейсхолдере в строке поиска и в алерте при добавлении статьи в Saved
+    private func showPersonalizeAlert() {
+        let alert = UIAlertController(title: "Personalization", message: "Please enter your first name", preferredStyle: .alert)
+        alert.addTextField { (textField: UITextField!) in
+            textField.placeholder = ""
+        }
+        let action = UIAlertAction(title: "Done", style: .default) { (action : UIAlertAction) in
+            guard let enteredName = alert.textFields?.first?.text else { return }
+            // Сохраняем имя пользователя в UserDefaults
+            UserDefaults.standard.setValue(enteredName, forKey: "userName")
+            // И добавляем обращение по имени в плейсхолдер строки поиска
+            var message: String = {
+                if let userName = UserDefaults.standard.value(forKey: "userName") as? String {
+                    if userName != "" {
+                        message = "\(userName), enter a keyword to search for"
+                    } else {
+                        message = "Enter a keyword to search for"
+                    }
+                }
+                return message
+            }()
+            self.searchController.searchBar.placeholder = message
+        }
+        alert.addAction(action)
+        present(alert, animated: true)
+    }
 
 // MARK: - Error handling
     private func showErrorAlert(for error: NetworkServiceError) {
@@ -107,6 +156,7 @@ class SearchViewController: BaseViewController {
                                       preferredStyle: .alert)
         present(alert, animated: true)
     }
+    
     private func setAlertMessage(for error: NetworkServiceError) -> String {
         switch error {
         case .network:
@@ -143,6 +193,7 @@ extension SearchViewController: UITableViewDataSource {
         return cell
     }
 }
+
 extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // не забываем диселектнуть ряд чтобы все было красиво

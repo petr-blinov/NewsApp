@@ -100,6 +100,17 @@ final class SavedArticleContentViewController: BaseViewController {
   }
     
 // MARK: - Methods
+    private func setContentFromCoreData() {
+            self.articleTitle.text = self.modelObject.articleTitle
+            guard let imageData = self.modelObject.imageData else { return }
+            self.imageView.image = UIImage(data: imageData)
+            self.articlePublishedAt.text = self.modelObject.articlePublishedAt
+            self.articleContent.text = self.modelObject.articleContent
+            self.readInSource.text = "Read in source:"
+            self.sourceLinkButton.setTitle(self.modelObject.sourceLink, for: .normal)
+            guard let linkForWebView = self.modelObject.linkForWebView else { return }
+            self.linkForWebView = linkForWebView
+    }
     @objc func openWebView() {
         guard let sourceLink = self.modelObject.sourceLink else { return }
         guard let url = URL(string: sourceLink) else { return }
@@ -143,20 +154,4 @@ final class SavedArticleContentViewController: BaseViewController {
         sourceLinkButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15),
         sourceLinkButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -100)])
   }
-  
-    // MARK: - Set content from Core Data
-    private func setContentFromCoreData() {
-        
-        DispatchQueue.main.async {
-            self.articleTitle.text = self.modelObject.articleTitle
-            guard let imageData = self.modelObject.imageData else { return }
-            self.imageView.image = UIImage(data: imageData)
-            self.articlePublishedAt.text = self.modelObject.articlePublishedAt
-            self.articleContent.text = self.modelObject.articleContent
-            self.readInSource.text = "Read in source:"
-            self.sourceLinkButton.setTitle(self.modelObject.sourceLink, for: .normal)
-            guard let linkForWebView = self.modelObject.linkForWebView else { return }
-            self.linkForWebView = linkForWebView
-        }
-    }
 }
