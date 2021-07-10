@@ -83,7 +83,7 @@ final class SavedArticleContentViewController: BaseViewController {
 // MARK: - Life Cycle
   override func viewDidLoad() {
     super.viewDidLoad()
-    view.backgroundColor = .white
+    view.backgroundColor = .systemTeal
     view.addSubview(scrollView)
     scrollView.addSubview(articleTitle)
     scrollView.addSubview(imageView)

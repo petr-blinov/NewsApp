@@ -33,6 +33,9 @@ class SavedNewsViewController: BaseViewController {
     }()
     lazy var deleteAllBarButton: UIBarButtonItem = {
         let deleteAllBarButton = UIBarButtonItem(title: "Remove all", style: .plain, target: self, action: #selector(deleteAllSavedArticles))
+        deleteAllBarButton.tintColor = .white
+        // Add label for UITests
+        deleteAllBarButton.accessibilityLabel = "Remove all"
         return deleteAllBarButton
     }()
     
@@ -41,7 +44,6 @@ class SavedNewsViewController: BaseViewController {
         super.viewDidLoad()
         tabBarItem.title = "Saved"
         tabBarItem.image = UIImage(systemName: "book.closed")
-        view.backgroundColor = .white
         view.addSubview(tableView)
     }
     override func viewWillLayoutSubviews() {
@@ -63,7 +65,11 @@ class SavedNewsViewController: BaseViewController {
     
     private func configureUI() {
         navigationItem.title = "Saved articles"
+        view.backgroundColor = .systemTeal
         navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.backgroundColor = .systemTeal
+        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
+        navigationController?.navigationBar.tintColor = UIColor.white
         navigationItem.rightBarButtonItems = [deleteAllBarButton]
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),

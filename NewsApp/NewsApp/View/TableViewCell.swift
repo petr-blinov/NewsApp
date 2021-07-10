@@ -12,7 +12,7 @@ final class ArticleCell: UITableViewCell {
     static let identifier = "ArticleCell"
     
     // MARK: - UI
-    private lazy var articleTitleLabel : UILabel = {
+    lazy var articleTitleLabel: UILabel = {
         let articleTitleLabel = UILabel()
         articleTitleLabel.numberOfLines = 0
         articleTitleLabel.font = UIFont.systemFont(ofSize: 17)

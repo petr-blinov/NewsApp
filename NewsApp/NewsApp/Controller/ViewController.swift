@@ -62,9 +62,14 @@ class ViewController: BaseViewController {
     
 // MARK: - Methods
     private func configureUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemTeal
         navigationItem.title = "News"
         navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.backgroundColor = .systemTeal
+        // Задаем цвет заголовку
+        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        // Задаем цвет кнопке возврата на этот экран
+        navigationController?.navigationBar.tintColor = UIColor.white
         view.addSubview(tableView)
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),

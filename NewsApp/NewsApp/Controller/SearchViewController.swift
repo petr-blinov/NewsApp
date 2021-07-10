@@ -23,11 +23,9 @@ class SearchViewController: BaseViewController {
 
 // MARK: - UI
     lazy var searchController: UISearchController = {
-        // в инициализаторе устанавливаем nil чтобы для отображения результатов поиска использовалось то же вью, в котором отображается наш контент
         let searchController = UISearchController(searchResultsController: nil)
-        // присваиваем self для делегата - чтобы получателем результата поиска был наш класс
+        UISearchBar.appearance().backgroundColor = UIColor.white
         searchController.searchResultsUpdater = self
-        // говорим чтобы не затемнял результаты поиска
         searchController.obscuresBackgroundDuringPresentation = false
         // добавляем в плейсхолдер обращение по имени если оно сохранено в UserDefaults
         var message: String = {
@@ -43,6 +41,7 @@ class SearchViewController: BaseViewController {
         searchController.searchBar.placeholder = message
         return searchController
     }()
+    
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(ArticleCell.self, forCellReuseIdentifier: ArticleCell.identifier)
@@ -52,8 +51,12 @@ class SearchViewController: BaseViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
+    
     lazy var personalizeBarButton: UIBarButtonItem = {
         let personalizeBarButton = UIBarButtonItem(title: "Personalize", style: .plain, target: self, action: #selector(personalizeButtonPressed))
+        personalizeBarButton.tintColor = .white
+        // Add label for UITests
+        personalizeBarButton.accessibilityLabel = "Personalize"
         return personalizeBarButton
     }()
 
@@ -70,7 +73,6 @@ class SearchViewController: BaseViewController {
 // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
         tabBarItem.title = "Search"
         tabBarItem.image = UIImage(systemName: "magnifyingglass")
         navigationItem.searchController = searchController
@@ -88,7 +90,11 @@ class SearchViewController: BaseViewController {
 // MARK: - Methods
     private func configureUI() {
         navigationItem.title = "Search"
+        view.backgroundColor = .systemTeal
         navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.backgroundColor = .systemTeal
+        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
+        navigationController?.navigationBar.tintColor = UIColor.white
         navigationItem.rightBarButtonItems = [personalizeBarButton]
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -123,7 +129,7 @@ class SearchViewController: BaseViewController {
     }
     
     // Получаем имя пользователя и сохраняем его в UserDefaults для дальнейшего обращения по имени в плейсхолдере в строке поиска и в алерте при добавлении статьи в Saved
-    private func showPersonalizeAlert() {
+     func showPersonalizeAlert() {
         let alert = UIAlertController(title: "Personalization", message: "Please enter your first name", preferredStyle: .alert)
         alert.addTextField { (textField: UITextField!) in
             textField.placeholder = ""

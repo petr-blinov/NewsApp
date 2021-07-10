@@ -84,13 +84,14 @@ final class ArticleContentViewController: BaseViewController {
     }()
     lazy var saveBarButton: UIBarButtonItem = {
         let saveBarButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(addToSavedNews))
+        saveBarButton.tintColor = .white
         return saveBarButton
     }()
 
 // MARK: - Life Cycle
   override func viewDidLoad() {
     super.viewDidLoad()
-    view.backgroundColor = .white
+    view.backgroundColor = .systemTeal
     navigationItem.rightBarButtonItems = [saveBarButton]
     view.addSubview(scrollView)
     scrollView.addSubview(articleTitle)
@@ -186,21 +187,28 @@ final class ArticleContentViewController: BaseViewController {
   }
   
 // MARK: - Load image and arrange elements
-  private func loadData() {
-    isLoading = true
-    networkService.loadImage(with: model) { (data) in
-      if let data = data, let image = UIImage(data: data) {
-          DispatchQueue.main.async {
-            self.articleTitle.text = self.model.title
-            self.imageView.image = image
-            self.articlePublishedAt.text = String(self.model.publishedAt.dropLast(10))
-            self.articleContent.text = self.model.description
-            self.readInSource.text = "Read in source:"
-            self.sourceLinkButton.setTitle(self.model.url, for: .normal)
-            self.linkForWebView = self.model.url
-            self.isLoading = false
-          }
-      }
+    private func loadData() {
+        isLoading = true
+        networkService.loadImage(with: model) { (data) in
+            if let data = data, let image = UIImage(data: data) {
+                DispatchQueue.main.async {
+                    self.imageView.image = image
+                    self.arrangeElements()
+                }
+            } else {
+                self.imageView.image = UIImage(named: "newsPlaceHolder")
+                self.arrangeElements()
+            }
+        }
     }
-  }
+    
+    private func arrangeElements() {
+        self.articleTitle.text = self.model.title
+        self.articlePublishedAt.text = String(self.model.publishedAt.dropLast(10))
+        self.articleContent.text = self.model.description
+        self.readInSource.text = "Read in source:"
+        self.sourceLinkButton.setTitle(self.model.url, for: .normal)
+        self.linkForWebView = self.model.url
+        self.isLoading = false
+    }
 }
