@@ -22,7 +22,6 @@ extension MOArticle {
     @NSManaged public var linkForWebView: String?
     @NSManaged public var sourceLink: String?
     @NSManaged public var imageData: Data?
-
 }
 
 extension MOArticle : Identifiable {

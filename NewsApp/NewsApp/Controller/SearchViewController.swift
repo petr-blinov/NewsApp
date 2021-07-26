@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SearchViewController: BaseViewController {
+final class SearchViewController: BaseViewController {
     
 // MARK: - Dependencies
     private let networkService: NetworkServiceProtocol
@@ -25,10 +25,12 @@ class SearchViewController: BaseViewController {
     lazy var searchController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
         UISearchBar.appearance().backgroundColor = UIColor.white
+        UISearchBar.appearance().tintColor  = UIColor.systemBlue
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
-        // добавляем в плейсхолдер обращение по имени если оно сохранено в UserDefaults
+        // добавляем в плейсхолдер обращение по имени если оно сохранено в UserDefaults. Если в UserDefaults ничего нет, то используем старнадртный текст для плейсхолдера
         var message: String = {
+            var message = String()
             if let userName = UserDefaults.standard.value(forKey: "userName") as? String {
                 if userName != "" {
                     message = "\(userName), enter a keyword to search for"
@@ -52,11 +54,12 @@ class SearchViewController: BaseViewController {
         return tableView
     }()
     
-    lazy var personalizeBarButton: UIBarButtonItem = {
+    private lazy var personalizeBarButton: UIBarButtonItem = {
         let personalizeBarButton = UIBarButtonItem(title: "Personalize", style: .plain, target: self, action: #selector(personalizeButtonPressed))
         personalizeBarButton.tintColor = .white
         // Add label for UITests
-        personalizeBarButton.accessibilityLabel = "Personalize"
+        personalizeBarButton.isAccessibilityElement = true
+        personalizeBarButton.accessibilityIdentifier = "Personalize"
         return personalizeBarButton
     }()
 
@@ -128,7 +131,7 @@ class SearchViewController: BaseViewController {
         showPersonalizeAlert()
     }
     
-    // Получаем имя пользователя и сохраняем его в UserDefaults для дальнейшего обращения по имени в плейсхолдере в строке поиска и в алерте при добавлении статьи в Saved
+    // Алерт, в котором получаем имя пользователя и сохраняем его в UserDefaults - для дальнейшего обращения по имени в плейсхолдере в строке поиска и в алерте при добавлении статьи в Saved
      func showPersonalizeAlert() {
         let alert = UIAlertController(title: "Personalization", message: "Please enter your first name", preferredStyle: .alert)
         alert.addTextField { (textField: UITextField!) in
@@ -139,7 +142,8 @@ class SearchViewController: BaseViewController {
             // Сохраняем имя пользователя в UserDefaults
             UserDefaults.standard.setValue(enteredName, forKey: "userName")
             // И добавляем обращение по имени в плейсхолдер строки поиска
-            var message: String = {
+            let message: String = {
+                var message = String()
                 if let userName = UserDefaults.standard.value(forKey: "userName") as? String {
                     if userName != "" {
                         message = "\(userName), enter a keyword to search for"

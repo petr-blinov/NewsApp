@@ -8,7 +8,7 @@
 import UIKit
 import CoreData
 
-class SavedNewsViewController: BaseViewController {
+final class SavedNewsViewController: BaseViewController {
     
 // MARK: - FetchedResultsController
     private let frc: NSFetchedResultsController<MOArticle> = {
@@ -31,7 +31,7 @@ class SavedNewsViewController: BaseViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
-    lazy var deleteAllBarButton: UIBarButtonItem = {
+    private lazy var deleteAllBarButton: UIBarButtonItem = {
         let deleteAllBarButton = UIBarButtonItem(title: "Remove all", style: .plain, target: self, action: #selector(deleteAllSavedArticles))
         deleteAllBarButton.tintColor = .white
         // Add label for UITests

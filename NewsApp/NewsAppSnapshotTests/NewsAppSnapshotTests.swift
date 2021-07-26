@@ -2,7 +2,7 @@
 //  NewsAppSnapshotTests.swift
 //  NewsAppSnapshotTests
 //
-//  Created by Petr Blinov on 10.07.2021.
+//  Created by Petr Blinov on 25.07.2021.
 //
 
 import XCTest
@@ -22,11 +22,11 @@ class NewsAppSnapshotTests: XCTestCase {
 
     func testThatSearchViewControllerScreenSpapshotMatchesSavedPrototype() throws {
         // Arrange
+        isRecording = false
         // Act
         // Assert
-        assertSnapshot(matching: sut, as: .image)
+        assertSnapshot(matching: sut, as: .image(on: .iPhone8))
     }
-
 }
 
 

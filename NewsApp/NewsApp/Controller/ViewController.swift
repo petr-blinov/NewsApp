@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: BaseViewController {
+final class ViewController: BaseViewController {
     
 // MARK: - Dependencies
     let networkService: NetworkServiceProtocol
@@ -32,7 +32,7 @@ class ViewController: BaseViewController {
         tableView.refreshControl = refreshControl
         return tableView
     }()
-    let refreshControl: UIRefreshControl = {
+    private let refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(pullToRefresh(sender:)), for: .valueChanged)
         return refreshControl
@@ -88,7 +88,7 @@ class ViewController: BaseViewController {
         self.networkService.getArticles(searchRequest: "") {
             self.processDataLoading($0) }
     }
-    func processDataLoading(_ response: GetAPIResponse) {
+    private func processDataLoading(_ response: GetAPIResponse) {
         DispatchQueue.main.async {
             switch response {
             case .success(let data):

@@ -82,7 +82,7 @@ final class ArticleContentViewController: BaseViewController {
         sourceLinkButton.addTarget(self, action: #selector(openWebView), for: .touchUpInside)
         return sourceLinkButton
     }()
-    lazy var saveBarButton: UIBarButtonItem = {
+    private lazy var saveBarButton: UIBarButtonItem = {
         let saveBarButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(addToSavedNews))
         saveBarButton.tintColor = .white
         return saveBarButton

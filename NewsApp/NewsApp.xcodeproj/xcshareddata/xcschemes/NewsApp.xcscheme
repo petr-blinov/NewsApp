@@ -59,6 +59,16 @@
                ReferencedContainer = "container:NewsApp.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "A2911DE326AAEB4B0040815B"
+               BuildableName = "NewsAppUITestsWithPageObjectPattern.xctest"
+               BlueprintName = "NewsAppUITestsWithPageObjectPattern"
+               ReferencedContainer = "container:NewsApp.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

@@ -23,17 +23,15 @@ class BaseViewController: UITabBarController {
     }
     
     func showSpinner(isShown: Bool) -> Bool {
-        
         if isShown {
-//      Добавляем View Controller со спиннером как дочерний
+            // Добавляем View Controller со спиннером как дочерний
             addChild(spinnerVC)
             spinnerVC.view.frame = view.frame
             view.addSubview(spinnerVC.view)
             spinnerVC.didMove(toParent: self)
             return true
-       
         } else {
-//          Удаляем дочерний VC
+            // Удаляем дочерний VC
             spinnerVC.willMove(toParent: nil)
             spinnerVC.view.removeFromSuperview()
             spinnerVC.removeFromParent()
