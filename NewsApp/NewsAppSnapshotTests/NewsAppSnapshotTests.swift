@@ -11,15 +11,15 @@ import SnapshotTesting
 
 class NewsAppSnapshotTests: XCTestCase {
     var sut: SearchViewController!
-
+    
     override func setUpWithError() throws {
         let networkServiceDummy = NetworkServiceDummy()
         sut = SearchViewController(networkService: networkServiceDummy)
     }
-
+    
     override func tearDownWithError() throws {
     }
-
+    
     func testThatSearchViewControllerScreenSpapshotMatchesSavedPrototype() throws {
         // Arrange
         isRecording = false
@@ -28,7 +28,6 @@ class NewsAppSnapshotTests: XCTestCase {
         assertSnapshot(matching: sut, as: .image(on: .iPhone8))
     }
 }
-
 
 class NetworkServiceDummy: NetworkServiceProtocol  {
     func loadImage(with model: Get2ArticleDataResponse, completion: @escaping (Data?) -> Void) {

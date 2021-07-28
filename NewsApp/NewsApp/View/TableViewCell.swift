@@ -8,7 +8,7 @@
 import UIKit
 
 final class ArticleCell: UITableViewCell {
-  
+    
     static let identifier = "ArticleCell"
     
     // MARK: - UI
@@ -20,7 +20,7 @@ final class ArticleCell: UITableViewCell {
         return articleTitleLabel
     }()
     
-  // MARK: - Init
+    // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(articleTitleLabel)
@@ -31,7 +31,7 @@ final class ArticleCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-  // MARK: -  Layout
+    // MARK: -  Layout
     func setConstraints() {
         NSLayoutConstraint.activate([
             articleTitleLabel.topAnchor.constraint(equalTo: contentView.topAnchor,constant: 10),
@@ -41,8 +41,7 @@ final class ArticleCell: UITableViewCell {
         ])
     }
     
-  // MARK: - Configure
-  
+    // MARK: - Configure
     func configure(with model: Get2ArticleDataResponse) {
         articleTitleLabel.text = model.title
     }

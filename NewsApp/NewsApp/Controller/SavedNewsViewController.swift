@@ -10,7 +10,7 @@ import CoreData
 
 final class SavedNewsViewController: BaseViewController {
     
-// MARK: - FetchedResultsController
+    // MARK: - FetchedResultsController
     private let frc: NSFetchedResultsController<MOArticle> = {
         let request = NSFetchRequest<MOArticle>(entityName: "MOArticle")
         request.sortDescriptors = [.init(key: "articlePublishedAt", ascending: true)]
@@ -21,7 +21,7 @@ final class SavedNewsViewController: BaseViewController {
     }()
     private let coreDataStack = CoreDataStack.shared
     
-// MARK: - UI
+    // MARK: - UI
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(ArticleCell.self, forCellReuseIdentifier: ArticleCell.identifier)
@@ -32,14 +32,14 @@ final class SavedNewsViewController: BaseViewController {
         return tableView
     }()
     private lazy var deleteAllBarButton: UIBarButtonItem = {
-        let deleteAllBarButton = UIBarButtonItem(title: "Remove all", style: .plain, target: self, action: #selector(deleteAllSavedArticles))
+        let deleteAllBarButton = UIBarButtonItem(title: "Remove all", style: .plain, target: self, action: #selector(deleteAllButtonPressed))
         deleteAllBarButton.tintColor = .white
-        // Add label for UITests
+        // Добавляем accessibilityLabel для UITests
         deleteAllBarButton.accessibilityLabel = "Remove all"
         return deleteAllBarButton
     }()
     
-// MARK: - Life Cycle
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         tabBarItem.title = "Saved"
@@ -56,8 +56,23 @@ final class SavedNewsViewController: BaseViewController {
         tableView.reloadData()
     }
     
-// MARK: - Methods
-    @objc func deleteAllSavedArticles() {
+    // MARK: - Methods
+    @objc private func deleteAllButtonPressed() {
+        showWarningAlert()
+    }
+    
+    private func showWarningAlert() {
+        let alert = UIAlertController(title: "Are you sure?", message: "This action will remove all saved articles", preferredStyle: .alert)
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (action : UIAlertAction) in
+            self.deleteAllSavedArticles()
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+        alert.addAction(cancelAction)
+        alert.addAction(deleteAction)
+        present(alert, animated: true)
+    }
+    
+    @objc private func deleteAllSavedArticles() {
         coreDataStack.deleteAll()
         try? frc.performFetch()
         tableView.reloadData()
@@ -102,6 +117,7 @@ extension SavedNewsViewController: UITableViewDataSource {
         }
     }
 }
+
 extension SavedNewsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // не забываем диселектнуть ряд чтобы все было красиво

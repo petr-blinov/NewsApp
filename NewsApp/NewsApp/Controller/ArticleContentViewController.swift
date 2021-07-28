@@ -8,29 +8,29 @@
 import UIKit
 import SafariServices
 import CoreData
-    
+
 final class ArticleContentViewController: BaseViewController {
     
     
-// MARK: - Dependencies
+    // MARK: - Dependencies
     private var networkService: NetworkServiceProtocol
     private var model: Get2ArticleDataResponse
     
-// MARK: - Init
+    // MARK: - Init
     init(networkService: NetworkServiceProtocol, model: Get2ArticleDataResponse) {
-      self.networkService = networkService
-      self.model = model
-      super.init(nibName: nil, bundle: nil)
+        self.networkService = networkService
+        self.model = model
+        super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) {
-      fatalError("init(coder:) has not been implemented")
+        fatalError("init(coder:) has not been implemented")
     }
     
-// MARK: - Internal Properties
+    // MARK: - Internal Properties
     private var linkForWebView = ""
     private let stack = CoreDataStack.shared
     
-// MARK: - UI
+    // MARK: - UI
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.backgroundColor = .white
@@ -87,28 +87,28 @@ final class ArticleContentViewController: BaseViewController {
         saveBarButton.tintColor = .white
         return saveBarButton
     }()
-
-// MARK: - Life Cycle
-  override func viewDidLoad() {
-    super.viewDidLoad()
-    view.backgroundColor = .systemTeal
-    navigationItem.rightBarButtonItems = [saveBarButton]
-    view.addSubview(scrollView)
-    scrollView.addSubview(articleTitle)
-    scrollView.addSubview(imageView)
-    scrollView.addSubview(articlePublishedAt)
-    scrollView.addSubview(articleContent)
-    scrollView.addSubview(readInSource)
-    scrollView.addSubview(sourceLinkButton)
-    loadData()
-  }
-  
-  override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(animated)
-    setConstraints()
-  }
     
-// MARK: - Methods
+    // MARK: - Life Cycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .systemTeal
+        navigationItem.rightBarButtonItems = [saveBarButton]
+        view.addSubview(scrollView)
+        scrollView.addSubview(articleTitle)
+        scrollView.addSubview(imageView)
+        scrollView.addSubview(articlePublishedAt)
+        scrollView.addSubview(articleContent)
+        scrollView.addSubview(readInSource)
+        scrollView.addSubview(sourceLinkButton)
+        loadData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setConstraints()
+    }
+    
+    // MARK: - Methods
     @objc func openWebView() {
         guard let url = URL(string: self.model.url) else { return }
         let webViewViewController = SFSafariViewController(url: url)
@@ -149,44 +149,43 @@ final class ArticleContentViewController: BaseViewController {
         }
     }
     
-  // MARK: - Constraints
-  private func setConstraints() {
-    NSLayoutConstraint.activate([
-                                    
-        // Чтобы scrollView прокручивался только вертикально (без горизонтали) - привязываем все элементы не к scrollView, а к view. Но при этом bottomAnchor последнего элемента - к scrollView.
-        scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-        scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-        scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-        scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-                                    
-        articleTitle.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 0),
-        articleTitle.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15),
-        articleTitle.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -15),
-   
-        articlePublishedAt.topAnchor.constraint(equalTo: articleTitle.bottomAnchor, constant: 20),
-        articlePublishedAt.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15),
-        articlePublishedAt.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -15),
-                                    
-        imageView.topAnchor.constraint(equalTo: articlePublishedAt.bottomAnchor, constant: 5),
-        imageView.bottomAnchor.constraint(equalTo: imageView.topAnchor,constant: 280),
-        imageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-        imageView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-
-        articleContent.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 20),
-        articleContent.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15),
-        articleContent.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -15),
-
-        readInSource.topAnchor.constraint(equalTo: articleContent.bottomAnchor, constant: 20),
-        readInSource.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15),
-        readInSource.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -15),
-
-        sourceLinkButton.topAnchor.constraint(equalTo: readInSource.bottomAnchor, constant: 2),
-        sourceLinkButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -50),
-        sourceLinkButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15),
-        sourceLinkButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -100)])
-  }
-  
-// MARK: - Load image and arrange elements
+    // MARK: - Constraints
+    private func setConstraints() {
+        NSLayoutConstraint.activate([
+            // Чтобы scrollView прокручивался только вертикально (без горизонтали) - привязываем все элементы не к scrollView, а к view. Но при этом bottomAnchor последнего элемента - к scrollView.
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            
+            articleTitle.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 0),
+            articleTitle.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15),
+            articleTitle.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -15),
+            
+            articlePublishedAt.topAnchor.constraint(equalTo: articleTitle.bottomAnchor, constant: 20),
+            articlePublishedAt.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15),
+            articlePublishedAt.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -15),
+            
+            imageView.topAnchor.constraint(equalTo: articlePublishedAt.bottomAnchor, constant: 5),
+            imageView.bottomAnchor.constraint(equalTo: imageView.topAnchor,constant: 280),
+            imageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            
+            articleContent.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 20),
+            articleContent.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15),
+            articleContent.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -15),
+            
+            readInSource.topAnchor.constraint(equalTo: articleContent.bottomAnchor, constant: 20),
+            readInSource.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15),
+            readInSource.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -15),
+            
+            sourceLinkButton.topAnchor.constraint(equalTo: readInSource.bottomAnchor, constant: 2),
+            sourceLinkButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -50),
+            sourceLinkButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15),
+            sourceLinkButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -100)])
+    }
+    
+    // MARK: - Load image and arrange elements
     private func loadData() {
         isLoading = true
         networkService.loadImage(with: model) { (data) in

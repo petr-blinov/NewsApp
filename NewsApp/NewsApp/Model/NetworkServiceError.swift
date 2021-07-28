@@ -6,7 +6,6 @@
 //
 
 enum NetworkServiceError: Error {
-    
     case network
     case decodable
     case unknown

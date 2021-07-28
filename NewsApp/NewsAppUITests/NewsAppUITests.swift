@@ -17,7 +17,7 @@ class NewsAppUITests: XCTestCase {
     }
     override func tearDownWithError() throws {
     }
-
+    
     func testThatNewsAndSearchAndSavedButtonsExistOnTabBar() throws {
         // Arrange
         let newsButton = app.tabBars.buttons["News"]
@@ -29,7 +29,7 @@ class NewsAppUITests: XCTestCase {
         XCTAssertTrue(searchButton.exists)
         XCTAssertTrue(savedButton.exists)
     }
-
+    
     func testThatPersonalizeButtonExistsWhenWeTapSearchButtonAndMoveToSearchViewController() throws {
         // Arrange
         let searchButton = app.tabBars.buttons["Search"]

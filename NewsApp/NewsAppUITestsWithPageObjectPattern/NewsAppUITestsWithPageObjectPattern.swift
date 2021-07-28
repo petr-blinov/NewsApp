@@ -8,7 +8,7 @@
 import XCTest
 
 extension XCUIApplication {
-   
+    
     func searchButton() -> XCUIElement {
         return self.tabBars.buttons["Search"]
     }
@@ -25,7 +25,6 @@ extension XCUIApplication {
         return self.alerts.element.buttons["Done"]
     }
 }
-
 
 protocol Page {
     var app: XCUIApplication { get }
@@ -47,31 +46,23 @@ class SearchPage: Page {
     }
 }
 
-
 class NewsAppUITestsWithPageObjectPattern: XCTestCase {
-    
     var app: XCUIApplication!
-    
     override func setUpWithError() throws {
         app = XCUIApplication()
         app.launch()
         continueAfterFailure = false
     }
-    
     override func tearDownWithError() throws {
-        
     }
     
     func testThatUserNameEnteredViaPerpersonalizeButtonGoesToSearchBarPlaceholder() throws {
-        
         // Arrange
         app.searchButton().tap()
         let searchPage = SearchPage(app: app)
-        
         // Act
         searchPage.enterUserName(userName: "John")
         searchPage.tapDoneButton()
-        
         // Assert
         let searchFieldPlaceholderText = app.searchFields.firstMatch.placeholderValue
         XCTAssertTrue(searchFieldPlaceholderText == "John, enter a keyword to search for")

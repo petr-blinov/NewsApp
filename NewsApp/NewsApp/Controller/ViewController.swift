@@ -9,10 +9,10 @@ import UIKit
 
 final class ViewController: BaseViewController {
     
-// MARK: - Dependencies
+    // MARK: - Dependencies
     let networkService: NetworkServiceProtocol
     
-// MARK: - Init
+    // MARK: - Init
     init(networkService: NetworkServiceProtocol) {
         self.networkService = networkService
         super.init(nibName: nil, bundle: nil)
@@ -21,7 +21,7 @@ final class ViewController: BaseViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-//MARK: - UI
+    //MARK: - UI
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(ArticleCell.self, forCellReuseIdentifier: ArticleCell.identifier)
@@ -38,10 +38,10 @@ final class ViewController: BaseViewController {
         return refreshControl
     }()
     
-// MARK: - Internal Properties
+    // MARK: - Internal Properties
     private var dataSource = [Get2ArticleDataResponse]()
     
-// MARK: - Life Cycle
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         // Устанавливаем константу с номером страницы на 1 - чтобы при загрузке приложения выдача была с первой страницы
@@ -60,7 +60,7 @@ final class ViewController: BaseViewController {
         Constants.searchRequest = ""
     }
     
-// MARK: - Methods
+    // MARK: - Methods
     private func configureUI() {
         view.backgroundColor = .systemTeal
         navigationItem.title = "News"
@@ -101,7 +101,7 @@ final class ViewController: BaseViewController {
         }
     }
     
-// MARK: - Error handling
+    // MARK: - Error handling
     private func showErrorAlert(for error: NetworkServiceError) {
         let alert = UIAlertController(title: "Oops, something went wrong",
                                       message: setAlertMessage(for: error),
@@ -133,8 +133,8 @@ extension ViewController: UITableViewDataSource {
         return cell
     }
 }
+
 extension ViewController: UITableViewDelegate {
-    
     // Используем willDisplay cell для того чтобы таблица загружала новый кусок данных когда мы пролистываем до последней ячейки (у нас в выдаче не больше двух страниц по 20 статей, поэтому ограничиваемся двумя страницами)
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.row == dataSource.count - 1, !isLoading, Constants.page == 1 {

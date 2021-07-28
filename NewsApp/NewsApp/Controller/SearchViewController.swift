@@ -9,10 +9,10 @@ import UIKit
 
 final class SearchViewController: BaseViewController {
     
-// MARK: - Dependencies
+    // MARK: - Dependencies
     private let networkService: NetworkServiceProtocol
-
-// MARK: - Init
+    
+    // MARK: - Init
     init(networkService: NetworkServiceProtocol) {
         self.networkService = networkService
         super.init(nibName: nil, bundle: nil)
@@ -20,8 +20,8 @@ final class SearchViewController: BaseViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-// MARK: - UI
+    
+    // MARK: - UI
     lazy var searchController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
         UISearchBar.appearance().backgroundColor = UIColor.white
@@ -57,13 +57,13 @@ final class SearchViewController: BaseViewController {
     private lazy var personalizeBarButton: UIBarButtonItem = {
         let personalizeBarButton = UIBarButtonItem(title: "Personalize", style: .plain, target: self, action: #selector(personalizeButtonPressed))
         personalizeBarButton.tintColor = .white
-        // Add label for UITests
+        // Добавляем Accessibility для UITests
         personalizeBarButton.isAccessibilityElement = true
         personalizeBarButton.accessibilityIdentifier = "Personalize"
         return personalizeBarButton
     }()
-
-// MARK: - Internal Properties
+    
+    // MARK: - Internal Properties
     var timer = Timer()
     private var dataSource = [Get2ArticleDataResponse]() {
         didSet {
@@ -72,8 +72,8 @@ final class SearchViewController: BaseViewController {
             }
         }
     }
-
-// MARK: - Life Cycle
+    
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         tabBarItem.title = "Search"
@@ -89,8 +89,8 @@ final class SearchViewController: BaseViewController {
         super.viewWillLayoutSubviews()
         configureUI()
     }
-
-// MARK: - Methods
+    
+    // MARK: - Methods
     private func configureUI() {
         navigationItem.title = "Search"
         view.backgroundColor = .systemTeal
@@ -106,7 +106,7 @@ final class SearchViewController: BaseViewController {
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
-
+    
     private func loadData(searchRequest: String) {
         isLoading = true
         self.networkService.getArticles(searchRequest: searchRequest) {
@@ -132,7 +132,7 @@ final class SearchViewController: BaseViewController {
     }
     
     // Алерт, в котором получаем имя пользователя и сохраняем его в UserDefaults - для дальнейшего обращения по имени в плейсхолдере в строке поиска и в алерте при добавлении статьи в Saved
-     func showPersonalizeAlert() {
+    func showPersonalizeAlert() {
         let alert = UIAlertController(title: "Personalization", message: "Please enter your first name", preferredStyle: .alert)
         alert.addTextField { (textField: UITextField!) in
             textField.placeholder = ""
@@ -158,8 +158,8 @@ final class SearchViewController: BaseViewController {
         alert.addAction(action)
         present(alert, animated: true)
     }
-
-// MARK: - Error handling
+    
+    // MARK: - Error handling
     private func showErrorAlert(for error: NetworkServiceError) {
         let alert = UIAlertController(title: "Oops, something went wrong",
                                       message: setAlertMessage(for: error),

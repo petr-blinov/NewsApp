@@ -7,10 +7,7 @@
 
 import UIKit
 
-
 //Создаем базовый View Controller чтобы от него наследовались все другие VC (добавляем в него спиннер чтобы он тоже сразу был у всех VC)
-
-
 class BaseViewController: UITabBarController {
     
     private let spinnerVC = SpinnerViewController()
@@ -38,5 +35,4 @@ class BaseViewController: UITabBarController {
             return false
         }
     }
-    
 }

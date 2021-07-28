@@ -5,7 +5,6 @@
 //  Created by Петр Блинов on 03.06.2021.
 //
 
-
 struct Get1Response: Decodable {
     let status: String
     let totalResults: Int
