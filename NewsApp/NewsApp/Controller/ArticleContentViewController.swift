@@ -195,8 +195,10 @@ final class ArticleContentViewController: BaseViewController {
                     self.arrangeElements()
                 }
             } else {
+                DispatchQueue.main.async {
                 self.imageView.image = UIImage(named: "newsPlaceHolder")
                 self.arrangeElements()
+                }
             }
         }
     }
